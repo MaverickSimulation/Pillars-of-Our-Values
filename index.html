@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How We Work Around Here</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+        font-size: 15px;
+        line-height: 1.7;
+        color: #111;
+        background: #fff;
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 56px 40px 80px;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #0f0f0f;
+          color: #e8e8e8;
+        }
+        .pillar-row:nth-child(even) {
+          background: #1a1a1a;
+        }
+        .counter-table td {
+          border-color: #2a2a2a;
+        }
+        .counter-table tr:nth-child(even) td {
+          background: #1a1a1a;
+        }
+        .perf-track {
+          background: #2a2a2a;
+        }
+        .opening-box {
+          background: #161616;
+          border-left-color: #1a5ca8;
+        }
+        .doc-meta {
+          color: #666;
+        }
+        .pillar-num {
+          color: #555;
+        }
+        .pillar-desc {
+          color: #aaa;
+        }
+        .counter-bad {
+          color: #666;
+        }
+        .counter-good {
+          color: #ccc;
+        }
+        th {
+          background: #1a1a1a;
+          color: #999;
+        }
+        .perf-label-low {
+          color: #444;
+        }
+        .perf-pct-low {
+          color: #444;
+        }
+        .closing-quote {
+          color: #888;
+        }
+        .sig-meta {
+          color: #666;
+        }
+      }
+
+      /* ── Meta ── */
+      .doc-meta {
+        font-size: 12px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #999;
+        margin-bottom: 28px;
+      }
+
+      /* ── Title ── */
+      .doc-title {
+        font-size: 40px;
+        font-weight: 700;
+        line-height: 1.15;
+        letter-spacing: -0.5px;
+        margin-bottom: 4px;
+      }
+
+      .doc-title span {
+        font-weight: 300;
+        color: #1a5ca8;
+        font-style: italic;
+      }
+
+      .doc-divider {
+        border: none;
+        border-top: 1px solid #e0e0e0;
+        margin: 28px 0 24px;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .doc-divider {
+          border-top-color: #2a2a2a;
+        }
+      }
+
+      .doc-intro {
+        color: #555;
+        margin-bottom: 24px;
+        max-width: 620px;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .doc-intro {
+          color: #aaa;
+        }
+      }
+
+      /* ── Opening box ── */
+      .opening-box {
+        background: #f8f8f8;
+        border-left: 3px solid #1a5ca8;
+        padding: 14px 18px;
+        margin-bottom: 44px;
+        font-size: 15px;
+        color: #333;
+        line-height: 1.7;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .opening-box {
+          color: #ccc;
+        }
+      }
+
+      /* ── Section headers ── */
+      .section-header {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #1a5ca8;
+        border-left: 3px solid #1a5ca8;
+        padding-left: 14px;
+        margin-bottom: 20px;
+        margin-top: 48px;
+      }
+
+      /* ── Pillars ── */
+      .pillars {
+        border: 1px solid #e8e8e8;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .pillars {
+          border-color: #2a2a2a;
+        }
+      }
+
+      .pillar-row {
+        display: grid;
+        grid-template-columns: 190px 1fr;
+        border-bottom: 1px solid #eee;
+      }
+
+      .pillar-row:last-child {
+        border-bottom: none;
+      }
+
+      .pillar-row:nth-child(even) {
+        background: #fafafa;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .pillar-row {
+          border-bottom-color: #222;
+        }
+      }
+
+      .pillar-left {
+        padding: 16px 18px;
+        border-right: 1px solid #eee;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .pillar-left {
+          border-right-color: #222;
+        }
+      }
+
+      .pillar-num {
+        font-size: 11px;
+        color: #bbb;
+        letter-spacing: 0.05em;
+        display: block;
+        margin-bottom: 3px;
+      }
+
+      .pillar-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: #111;
+        line-height: 1.3;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .pillar-name {
+          color: #e8e8e8;
+        }
+        .pillar-row:nth-child(even) {
+          background: #161616;
+        }
+        .pillar-row {
+          border-bottom-color: #222;
+        }
+        .pillar-left {
+          border-right-color: #222;
+        }
+      }
+
+      .pillar-right {
+        padding: 16px 18px;
+        display: flex;
+        align-items: center;
+      }
+
+      .pillar-desc {
+        font-size: 14px;
+        color: #555;
+        line-height: 1.65;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .pillar-desc {
+          color: #999;
+        }
+      }
+
+      /* ── Counter table ── */
+      .counter-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+
+      .counter-table th {
+        text-align: left;
+        padding: 10px 14px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #777;
+        background: #f5f5f5;
+        border: 1px solid #e8e8e8;
+      }
+
+      .counter-table td {
+        padding: 11px 14px;
+        border: 1px solid #eee;
+        vertical-align: top;
+        line-height: 1.55;
+      }
+
+      .counter-table tr:nth-child(even) td {
+        background: #fafafa;
+      }
+
+      .counter-bad {
+        color: #999;
+        font-style: italic;
+      }
+
+      .counter-bad::before {
+        content: "✕  ";
+        font-size: 11px;
+        color: #ccc;
+      }
+
+      .counter-good {
+        color: #222;
+      }
+
+      .counter-good::before {
+        content: "✓  ";
+        font-size: 11px;
+        color: #1a5ca8;
+        font-weight: 700;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .counter-table th {
+          background: #1c1c1c;
+          border-color: #2a2a2a;
+          color: #666;
+        }
+        .counter-table td {
+          border-color: #222;
+        }
+        .counter-table tr:nth-child(even) td {
+          background: #161616;
+        }
+        .counter-bad {
+          color: #555;
+        }
+        .counter-good {
+          color: #ccc;
+        }
+        .counter-good::before {
+          color: #1a5ca8;
+        }
+        .counter-bad::before {
+          color: #444;
+        }
+      }
+
+      /* ── Performance table ── */
+      .perf-list {
+        display: flex;
+        flex-direction: column;
+        gap: 13px;
+      }
+
+      .perf-item {
+        display: grid;
+        grid-template-columns: 170px 1fr 48px;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .perf-label {
+        font-size: 14px;
+        color: #333;
+        text-align: right;
+      }
+
+      .perf-label-low {
+        color: #bbb;
+      }
+
+      .perf-track {
+        height: 5px;
+        background: #ebebeb;
+        border-radius: 3px;
+        overflow: hidden;
+      }
+
+      .perf-fill {
+        height: 100%;
+        background: #1a5ca8;
+        border-radius: 3px;
+      }
+
+      .perf-fill-low {
+        background: #ddd;
+      }
+
+      .perf-pct {
+        font-size: 13px;
+        color: #888;
+        font-weight: 500;
+      }
+
+      .perf-pct-low {
+        color: #ccc;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .perf-label {
+          color: #ccc;
+        }
+        .perf-pct {
+          color: #666;
+        }
+        .perf-track {
+          background: #2a2a2a;
+        }
+        .perf-fill {
+          background: #1a5ca8;
+        }
+        .perf-fill-low {
+          background: #2a2a2a;
+        }
+      }
+
+      /* ── Closing ── */
+      .closing {
+        margin-top: 56px;
+        border-top: 1px solid #e0e0e0;
+        padding-top: 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .closing {
+          border-top-color: #2a2a2a;
+        }
+      }
+
+      .closing-quote {
+        font-size: 18px;
+        font-style: italic;
+        font-weight: 300;
+        color: #777;
+        max-width: 420px;
+        line-height: 1.5;
+      }
+
+      .sig {
+        text-align: right;
+        line-height: 1.5;
+      }
+
+      .sig-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: #111;
+        display: block;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .sig-name {
+          color: #e8e8e8;
+        }
+      }
+
+      .sig-meta {
+        font-size: 13px;
+        color: #888;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <p class="doc-meta">Internal &mdash; All Teams</p>
+
+    <h1 class="doc-title">How We Work <span>Around Here</span></h1>
+
+    <hr class="doc-divider" />
+
+    <p class="doc-intro">
+      This isn't a list of rules. It's a description of the people we are and
+      the standards we hold ourselves to &mdash; because we believe this is how
+      great work actually gets done.
+    </p>
+
+    <div class="opening-box">
+      We hired you because we believe you're excellent. Since continued
+      excellence needs a framework. These are ours &mdash; built to
+      <strong>give it the right shape.</strong>
+    </div>
+
+    <!-- Pillars -->
+    <p class="section-header">The Seven Pillars</p>
+
+    <div class="pillars">
+      <div class="pillar-row">
+        <div class="pillar-left">
+          <span class="pillar-num">01</span>
+          <span class="pillar-name">Own It</span>
+        </div>
+        <div class="pillar-right">
+          <p class="pillar-desc">
+            You put your name on your work. You flag problems
+            <strong>early</strong>. You don't wait to be chased, and you don't
+            pass the problem sideways. We love to see you proactive and on top
+            of things.
+          </p>
+        </div>
+      </div>
+      <div class="pillar-row">
+        <div class="pillar-left">
+          <span class="pillar-num">02</span>
+          <span class="pillar-name">Deliver Reliably</span>
+        </div>
+        <div class="pillar-right">
+          <p class="pillar-desc">
+            Deadlines are <strong>commitments, not for tomorrow.</strong> If
+            something changes, you communicate it first &mdash; not after the
+            deadline passes.
+          </p>
+        </div>
+      </div>
+      <div class="pillar-row">
+        <div class="pillar-left">
+          <span class="pillar-num">03</span>
+          <span class="pillar-name">Make Others Better</span>
+        </div>
+        <div class="pillar-right">
+          <p class="pillar-desc">
+            Your knowledge doesn't stay with you. You
+            <strong>share, teach, and unblock</strong> the people around you. A
+            rising tide lifts everyone. We love to see you shine and mentor.
+          </p>
+        </div>
+      </div>
+      <div class="pillar-row">
+        <div class="pillar-left">
+          <span class="pillar-num">04</span>
+          <span class="pillar-name">Work Securely</span>
+        </div>
+        <div class="pillar-right">
+          <p class="pillar-desc">
+            Company information stays on
+            <strong>company-approved tools. No exceptions.</strong> This
+            protects our clients, our colleagues, and the firm.
+          </p>
+        </div>
+      </div>
+      <div class="pillar-row">
+        <div class="pillar-left">
+          <span class="pillar-num">05</span>
+          <span class="pillar-name">Grow Deliberately</span>
+        </div>
+        <div class="pillar-right">
+          <p class="pillar-desc">
+            You are expected to be
+            <strong>better at your job every six months</strong> than you were
+            before. Stagnation is not neutral &mdash; it is a choice we don't
+            make here.
+          </p>
+        </div>
+      </div>
+      <div class="pillar-row">
+        <div class="pillar-left">
+          <span class="pillar-num">06</span>
+          <span class="pillar-name">Collaborate Without Politics</span>
+        </div>
+        <div class="pillar-right">
+          <p class="pillar-desc">
+            Credit belongs to the work, not the loudest voice in the room. We
+            <strong>recognise contribution, not performance.</strong> There is
+            no audience to play to here.
+          </p>
+        </div>
+      </div>
+      <div class="pillar-row">
+        <div class="pillar-left">
+          <span class="pillar-num">07</span>
+          <span class="pillar-name">Set Goals. Hit Them.</span>
+        </div>
+        <div class="pillar-right">
+          <p class="pillar-desc">
+            Every quarter you set goals with your manager. Every quarter you are
+            <strong>measured against them.</strong> Ambiguity about what is
+            expected is not acceptable &mdash; from you or your manager.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Counter table -->
+    <p class="section-header">What This Looks Like in Practice</p>
+
+    <table class="counter-table">
+      <thead>
+        <tr>
+          <th style="width: 50%">Not This</th>
+          <th style="width: 50%">This</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <span class="counter-bad">Waiting to be asked for an update</span>
+          </td>
+          <td>
+            <span class="counter-good"
+              >Proactively flagging progress and blockers</span
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="counter-bad">Sharing work files on WhatsApp</span>
+          </td>
+          <td>
+            <span class="counter-good"
+              >Using only approved communication tools</span
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="counter-bad">Solving a problem and moving on</span>
+          </td>
+          <td>
+            <span class="counter-good"
+              >Documenting the solution so others benefit</span
+            >
+          </td>
+        </tr>
+        <tr>
+          <td><span class="counter-bad">Being secretive to get ahead</span></td>
+          <td>
+            <span class="counter-good"
+              >Delivering consistently to get ahead</span
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="counter-bad"
+              >Surfacing a problem without a view on the fix</span
+            >
+          </td>
+          <td>
+            <span class="counter-good"
+              >Surfacing a problem with a proposed solution</span
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Performance -->
+    <p class="section-header">How Performance Is Weighted Here</p>
+
+    <div class="perf-list">
+      <div class="perf-item">
+        <span class="perf-label">Output quality</span>
+        <div class="perf-track">
+          <div class="perf-fill" style="width: 92%"></div>
+        </div>
+        <span class="perf-pct">92%</span>
+      </div>
+      <div class="perf-item">
+        <span class="perf-label">Reliability</span>
+        <div class="perf-track">
+          <div class="perf-fill" style="width: 88%"></div>
+        </div>
+        <span class="perf-pct">88%</span>
+      </div>
+      <div class="perf-item">
+        <span class="perf-label">Ownership</span>
+        <div class="perf-track">
+          <div class="perf-fill" style="width: 85%"></div>
+        </div>
+        <span class="perf-pct">85%</span>
+      </div>
+      <div class="perf-item">
+        <span class="perf-label">Team contribution</span>
+        <div class="perf-track">
+          <div class="perf-fill" style="width: 75%"></div>
+        </div>
+        <span class="perf-pct">75%</span>
+      </div>
+      <div class="perf-item">
+        <span class="perf-label">Growth</span>
+        <div class="perf-track">
+          <div class="perf-fill" style="width: 70%"></div>
+        </div>
+        <span class="perf-pct">70%</span>
+      </div>
+    </div>
+
+    <!-- Closing -->
+    <div class="closing">
+      <p class="closing-quote">
+        &ldquo;We hold a high bar because we respect your ability to meet
+        it.&rdquo;
+      </p>
+      <div class="sig">
+        <span class="sig-name">Office of the CTO &amp; CEO</span>
+        <span class="sig-meta">Effective immediately</span>
+        <span class="sig-meta">All employees</span>
+      </div>
+    </div>
+  </body>
+</html>
